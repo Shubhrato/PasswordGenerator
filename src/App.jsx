@@ -13,17 +13,20 @@ function App() {
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     if(numberAllows) str += "1234567890";
-    if(charallows) str += "!@#$%^&*_+`~"
+    if(charallows) str += "!@#$%^&*_+`~";
 
-    for(let i = 1; i <= length; i++){
-      let char = Math.floor(Math.random() * str.length + 1);
+    for(let i = 0; i < length; i++){
+      let char = Math.floor(Math.random() * str.length);
       pass += str.charAt(char);
     }
 
     setPassword(pass);
 
-  },[length, numberAllows, charallows, setPassword]);
+  }, [length, numberAllows, charallows]);
 
+  useEffect(() => {
+    passwordGenerator();
+  }, [length, numberAllows, charallows, passwordGenerator]);
 
   return (
     <>
@@ -33,65 +36,55 @@ function App() {
         </h1>
 
         <div className='flex shadow overflow-hidden mb-4 rounded-lg py-2'>
-            <input 
+          <input 
             type="text"
             value={password}
             placeholder='Password'
-            className='outline-none w-full py-1 px-3 '
-            />
-
-            <button
-              className='outline-none bg-blue-700 text-white py-0.5 px-2 shrink-0'
-            >
-              copy
-            </button>
-
+            className='outline-none w-full py-1 px-3'
+            readOnly
+          />
+          <button className='outline-none bg-blue-700 text-white py-0.5 px-2 shrink-0'>
+            Copy
+          </button>
         </div>
 
         <div className='flex text-sm gap-x-2'>
-            <div className='flex items-center gap-x-1'>
-              <input 
+          <div className='flex items-center gap-x-1'>
+            <input 
               type="range" 
               className='cursor-pointer'
               min={8}
               max={20}
               value={length}
-              onChange={(e) => {setLength(e.target.value)}}
-              />
-              <label>Length: {length}</label>
-            </div>
+              onChange={(e) => setLength(parseInt(e.target.value))}
+            />
+            <label>Length: {length}</label>
+          </div>
 
-            <div className='flex items-center gap-x-1'>
-              <input 
+          <div className='flex items-center gap-x-1'>
+            <input 
               type="checkbox"  
-              defaultChecked={numberAllows}
+              checked={numberAllows}
               id='numberInput'
-              onChange={() => {
-                setNumberAllows((prev) => !prev)
-              }}
-              />
-              <label htmlFor="numbersInput">
-                Numbers
-              </label>
-            </div>
+              onChange={() => setNumberAllows((prev) => !prev)}
+            />
+            <label htmlFor="numberInput">
+              Numbers
+            </label>
+          </div>
 
-            <div className='flex items-center gap-x-1'>
-              <input 
+          <div className='flex items-center gap-x-1'>
+            <input 
               type="checkbox"  
-              defaultChecked={charallows}
+              checked={charallows}
               id='charInput'
-              onChange={() => {
-                setNumberAllows((prev) => !prev)
-              }}
-              />
-              <label htmlFor="charInput">
-                Characters
-              </label>
-            </div>
+              onChange={() => setcharallows((prev) => !prev)}
+            />
+            <label htmlFor="charInput">
+              Characters
+            </label>
+          </div>
         </div>
-
-        
-
       </div>
     </>
   );
